@@ -1,0 +1,44 @@
+{
+  "name": "lab-inventory-management-system",
+  "version": "1.0.0",
+  "description": "A comprehensive web-based inventory management system for laboratory equipment and printers",
+  "main": "index.html",
+  "scripts": {
+    "start": "php -S localhost:8000",
+    "dev": "php -S localhost:8000 -t .",
+    "setup": "php database/create_printers_table.php",
+    "test": "echo 'No tests configured yet'",
+    "build": "echo 'No build process needed for PHP application'"
+  },
+  "keywords": [
+    "inventory",
+    "management",
+    "laboratory",
+    "equipment",
+    "printers",
+    "php",
+    "javascript",
+    "mysql"
+  ],
+  "author": "Lab Inventory Management Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/lab-inventory-management"
+  },
+  "bugs": {
+    "url": "https://github.com/your-org/lab-inventory-management/issues"
+  },
+  "homepage": "https://github.com/your-org/lab-inventory-management#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "php": ">=7.4.0",
+    "mysql": ">=5.7.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

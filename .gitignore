@@ -1,0 +1,80 @@
+# Lab Inventory Management System - Git Ignore
+
+# Logs
+*.log
+logs/
+error.log
+access.log
+
+# Database
+*.sql
+*.db
+*.sqlite
+
+# Configuration files with sensitive data
+config/local.php
+config/production.php
+.env
+.env.local
+.env.production
+
+# Cache
+cache/
+tmp/
+temp/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node modules (if using npm)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Uploads directory (if you have file uploads)
+uploads/
+files/
+
+# Session files
+sessions/
+
+# Composer (if using PHP package manager)
+vendor/
+composer.lock
+
+# PHP specific
+*.php~
+.phpunit.result.cache
+
+# Test coverage
+coverage/
+
+# Documentation build
+docs/_build/
+
+# Local development
+local/
+dev/

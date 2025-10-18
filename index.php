@@ -38,6 +38,10 @@
         <i class="fas fa-server"></i>
         <span>Racks</span>
       </a>
+      <a href="#cameras" class="nav-link" data-page="cameras">
+        <i class="fas fa-video"></i>
+        <span>Cameras</span>
+      </a>
       <!-- <a href="#reports" class="nav-link" data-page="reports">
         <i class="fas fa-chart-bar"></i>
         <span>Reports</span>
@@ -61,62 +65,159 @@
   <div id="dashboard" class="page active">
     <div class="container">
       <div class="page-header">
-        <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
-        <p class="subtitle">Overview of your lab inventory system</p>
+        <h1><i class="fas fa-tachometer-alt"></i> Lab Inventory Dashboard</h1>
+        <p class="subtitle">Comprehensive overview of all lab assets and analytics</p>
       </div>
       
-      <div class="dashboard-grid">
-        <div class="stat-card">
+      <!-- Overview Stats Grid -->
+      <div class="dashboard-stats-grid">
+        <div class="stat-card primary">
           <div class="stat-icon">
             <i class="fas fa-desktop"></i>
           </div>
           <div class="stat-content">
             <h3 id="totalSystems">0</h3>
-            <p>Total Systems</p>
+            <p>Lab Systems</p>
+            <span class="stat-trend" id="systemsTrend">+0 this month</span>
           </div>
         </div>
         
-        <div class="stat-card">
+        <div class="stat-card success">
           <div class="stat-icon">
-            <i class="fas fa-building"></i>
+            <i class="fas fa-print"></i>
           </div>
           <div class="stat-content">
-            <h3 id="totalDepartments">0</h3>
-            <p>Departments</p>
+            <h3 id="totalPrinters">0</h3>
+            <p>Printers</p>
+            <span class="stat-trend" id="printersTrend">Active devices</span>
           </div>
         </div>
         
-        <div class="stat-card">
+        <div class="stat-card warning">
+          <div class="stat-icon">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="totalSwitches">0</h3>
+            <p>Network Switches</p>
+            <span class="stat-trend" id="switchesTrend">Network devices</span>
+          </div>
+        </div>
+        
+        <div class="stat-card info">
+          <div class="stat-icon">
+            <i class="fas fa-server"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="totalRacks">0</h3>
+            <p>Server Racks</p>
+            <span class="stat-trend" id="racksTrend">Infrastructure</span>
+          </div>
+        </div>
+
+        <div class="stat-card purple">
+          <div class="stat-icon">
+            <i class="fas fa-video"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="totalCameras">0</h3>
+            <p>CCTV Cameras</p>
+            <span class="stat-trend" id="camerasTrend">Security systems</span>
+          </div>
+        </div>
+        
+        <div class="stat-card dark">
           <div class="stat-icon">
             <i class="fas fa-dollar-sign"></i>
           </div>
           <div class="stat-content">
             <h3 id="totalValue">₹0</h3>
-            <p>Total Value</p>
-          </div>
-        </div>
-        
-        <div class="stat-card">
-          <div class="stat-icon">
-            <i class="fas fa-calendar-alt"></i>
-          </div>
-          <div class="stat-content">
-            <h3 id="recentAdditions">0</h3>
-            <p>Added This Month</p>
+            <p>Total Investment</p>
+            <span class="stat-trend" id="valueTrend">Asset value</span>
           </div>
         </div>
       </div>
-      
-      <div class="dashboard-charts">
-        <div class="chart-container">
-          <h3>Systems by Department</h3>
-          <canvas id="departmentChart" width="400" height="200"></canvas>
+
+      <!-- Analytics Section -->
+      <div class="dashboard-analytics">
+        <!-- Department Breakdown -->
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3><i class="fas fa-building"></i> Department Distribution</h3>
+            <p>Asset distribution across departments</p>
+          </div>
+          <div class="card-content">
+            <div class="chart-scroll-container">
+              <canvas id="departmentChart" width="600" height="400"></canvas>
+            </div>
+          </div>
         </div>
-        
-        <div class="chart-container">
-          <h3>Recent Activity</h3>
-          <div id="recentActivity" class="activity-list">
-            <!-- Activity items will be populated here -->
+
+        <!-- Asset Type Breakdown -->
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3><i class="fas fa-chart-pie"></i> Asset Categories</h3>
+            <p>Distribution by asset type</p>
+          </div>
+          <div class="card-content">
+            <div class="chart-scroll-container">
+              <canvas id="assetTypeChart" width="500" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Value Distribution -->
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3><i class="fas fa-chart-bar"></i> Investment by Category</h3>
+            <p>Cost breakdown across asset types</p>
+          </div>
+          <div class="card-content">
+            <div class="chart-scroll-container">
+              <canvas id="valueChart" width="600" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="analytics-card">
+          <div class="card-header">
+            <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+            <p>Latest system updates and additions</p>
+          </div>
+          <div class="card-content">
+            <div id="recentActivity" class="activity-list">
+              <!-- Activity items will be populated here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Department Details Table -->
+        <div class="analytics-card full-width">
+          <div class="card-header">
+            <h3><i class="fas fa-table"></i> Department Summary</h3>
+            <p>Detailed breakdown by department</p>
+          </div>
+          <div class="card-content">
+            <div class="table-container">
+              <table id="departmentSummaryTable" class="summary-table">
+                <thead>
+                  <tr>
+                    <th>Department</th>
+                    <th>Systems</th>
+                    <th>Printers</th>
+                    <th>Switches</th>
+                    <th>Racks</th>
+                    <th>Cameras</th>
+                    <th>Total Assets</th>
+                    <th>Total Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Data will be populated here -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -363,6 +464,45 @@
     </div>
   </div>
 
+  <!-- Cameras Page -->
+  <div id="cameras" class="page">
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-video"></i> CCTV Camera Management</h1>
+        <p class="subtitle">Manage CCTV camera inventory and details</p>
+      </div>
+      <div class="controls">
+        <button id="addCameraBtn">+ Add New Camera</button>
+        <button id="downloadCameraExcelBtn">📊 Download Excel</button>
+        <div class="search-container">
+          <input type="text" id="cameraSearchBox" placeholder="Search cameras..." onkeyup="searchCameraTable()">
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="camerasTable">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Building / Block</th>
+              <th>Location</th>
+              <th>Make</th>
+              <th>Model</th>
+              <th>Type</th>
+              <th>Pixel</th>
+              <th>QTY</th>
+              <th>Cost</th>
+              <th>Reg No</th>
+              <th>P. No</th>
+              <th>D.O.P</th>
+              <th>Remarks</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
   <!-- Settings Page -->
   <div id="settings" class="page">
@@ -557,32 +697,46 @@ function updateActiveNavLink(pageId) {
   });
 }
 
-// Dashboard functionality
+// Enhanced Dashboard functionality
 function loadDashboardData() {
-  fetch('api/system/fetch.php')
-    .then(res => res.json())
+  fetch('api/dashboard/analytics.php')
+    .then(response => response.json())
     .then(data => {
       updateDashboardStats(data);
-      createDepartmentChart(data);
-      updateRecentActivity(data);
+      createDashboardCharts(data);
+      updateRecentActivity(data.recent_activity);
+      updateDepartmentSummary(data);
     })
-    .catch(err => console.error('Error loading dashboard data:', err));
+    .catch(error => {
+      console.error('Error loading dashboard data:', error);
+      showNotification('Error loading dashboard data', 'error');
+    });
 }
 
 function updateDashboardStats(data) {
-  const totalSystems = data.length;
-  const departments = [...new Set(data.map(item => item.dept))].length;
-  const totalValue = data.reduce((sum, item) => sum + (parseFloat(item.cost) || 0), 0);
-  const currentMonth = new Date().getMonth();
-  const recentAdditions = data.filter(item => {
-    const dop = new Date(item.dop);
-    return dop.getMonth() === currentMonth;
-  }).length;
+  const totals = data.totals;
+  
+  // Update stat cards
+  document.getElementById('totalSystems').textContent = totals.systems || 0;
+  document.getElementById('totalPrinters').textContent = totals.printers || 0;
+  document.getElementById('totalSwitches').textContent = totals.switches || 0;
+  document.getElementById('totalRacks').textContent = totals.racks || 0;
+  document.getElementById('totalCameras').textContent = totals.cameras || 0;
+  document.getElementById('totalValue').textContent = `₹${(totals.total_value || 0).toLocaleString()}`;
+  
+  // Update trends
+  document.getElementById('systemsTrend').textContent = `${totals.systems} active systems`;
+  document.getElementById('printersTrend').textContent = `${totals.printers} devices`;
+  document.getElementById('switchesTrend').textContent = `${totals.switches} network devices`;
+  document.getElementById('racksTrend').textContent = `${totals.racks} infrastructure units`;
+  document.getElementById('camerasTrend').textContent = `${totals.cameras} security devices`;
+  document.getElementById('valueTrend').textContent = `Total investment value`;
+}
 
-  document.getElementById('totalSystems').textContent = totalSystems;
-  document.getElementById('totalDepartments').textContent = departments;
-  document.getElementById('totalValue').textContent = `₹${totalValue.toLocaleString()}`;
-  document.getElementById('recentAdditions').textContent = recentAdditions;
+function createDashboardCharts(data) {
+  createDepartmentChart(data);
+  createAssetTypeChart(data);
+  createValueChart(data);
 }
 
 function createDepartmentChart(data) {
@@ -590,51 +744,276 @@ function createDepartmentChart(data) {
   if (!canvas) return;
   
   const ctx = canvas.getContext('2d');
-  const deptCounts = {};
   
-  data.forEach(item => {
-    deptCounts[item.dept] = (deptCounts[item.dept] || 0) + 1;
+  // Aggregate department data
+  const deptData = {};
+  const deptSystems = data.by_department;
+  
+  // Combine all department data
+  [...(deptSystems.systems || []), ...(deptSystems.printers || []), 
+   ...(deptSystems.switches || []), ...(deptSystems.racks || []),
+   ...(deptSystems.cameras || [])].forEach(item => {
+    const dept = item.dept || item.building_block;
+    if (dept) {
+      deptData[dept] = (deptData[dept] || 0) + (parseInt(item.systems || item.printers || item.switches || item.racks || item.cameras || 0));
+    }
   });
   
-  // Simple bar chart implementation
-  const departments = Object.keys(deptCounts);
-  const counts = Object.values(deptCounts);
-  const maxCount = Math.max(...counts);
+  const departments = Object.keys(deptData);
+  const counts = Object.values(deptData);
+  const maxCount = Math.max(...counts, 1);
   
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  departments.forEach((dept, index) => {
-    const barHeight = (counts[index] / maxCount) * 150;
-    const x = index * (canvas.width / departments.length) + 20;
-    const y = canvas.height - barHeight - 20;
-    
-    ctx.fillStyle = `hsl(${index * 60}, 70%, 50%)`;
-    ctx.fillRect(x, y, 40, barHeight);
-    
-    ctx.fillStyle = '#333';
-    ctx.font = '12px Inter';
+  if (departments.length === 0) {
+    ctx.fillStyle = '#718096';
+    ctx.font = '16px Inter';
     ctx.textAlign = 'center';
-    ctx.fillText(dept, x + 20, canvas.height - 5);
-    ctx.fillText(counts[index], x + 20, y - 5);
+    ctx.fillText('No data available', canvas.width / 2, canvas.height / 2);
+    return;
+  }
+  
+  const colors = ['#3182ce', '#48bb78', '#ed8936', '#9f7aea', '#4299e1', '#f56565'];
+  const barWidth = Math.min(60, (canvas.width - 80) / departments.length - 20);
+  const spacing = Math.max(80, (canvas.width - 80) / departments.length);
+  
+  departments.forEach((dept, index) => {
+    const barHeight = (counts[index] / maxCount) * (canvas.height - 120);
+    const x = 40 + index * spacing + (spacing - barWidth) / 2;
+    const y = canvas.height - barHeight - 60;
+    
+    // Draw bar
+    ctx.fillStyle = colors[index % colors.length];
+    ctx.fillRect(x, y, barWidth, barHeight);
+    
+    // Draw department label with proper spacing
+    ctx.fillStyle = '#4a5568';
+    ctx.font = '14px Inter';
+    ctx.textAlign = 'center';
+    ctx.save();
+    ctx.translate(x + barWidth / 2, canvas.height - 20);
+    ctx.rotate(-Math.PI / 6);
+    ctx.fillText(dept, 0, 0);
+    ctx.restore();
+    
+    // Draw count label
+    ctx.fillStyle = '#1a202c';
+    ctx.font = 'bold 16px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText(counts[index], x + barWidth / 2, y - 10);
   });
 }
 
-function updateRecentActivity(data) {
-  const activityContainer = document.getElementById('recentActivity');
-  if (!activityContainer) return;
+function createAssetTypeChart(data) {
+  const canvas = document.getElementById('assetTypeChart');
+  if (!canvas) return;
   
-  const recentItems = data.slice(-5).reverse();
-  activityContainer.innerHTML = recentItems.map(item => `
+  const ctx = canvas.getContext('2d');
+  const totals = data.totals;
+  
+  const assetTypes = [
+    { name: 'Systems', count: totals.systems, color: '#3182ce' },
+    { name: 'Printers', count: totals.printers, color: '#48bb78' },
+    { name: 'Switches', count: totals.switches, color: '#ed8936' },
+    { name: 'Racks', count: totals.racks, color: '#9f7aea' },
+    { name: 'Cameras', count: totals.cameras, color: '#4299e1' }
+  ];
+  
+  const total = assetTypes.reduce((sum, asset) => sum + asset.count, 0);
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (total === 0) {
+    ctx.fillStyle = '#718096';
+    ctx.font = '16px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText('No data available', canvas.width / 2, canvas.height / 2);
+    return;
+  }
+  
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2 - 20;
+  const radius = Math.min(centerX, centerY) - 40;
+  
+  let currentAngle = -Math.PI / 2;
+  
+  assetTypes.forEach((asset, index) => {
+    if (asset.count > 0) {
+      const sliceAngle = (asset.count / total) * 2 * Math.PI;
+      
+      // Draw pie slice
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+      ctx.closePath();
+      ctx.fillStyle = asset.color;
+      ctx.fill();
+      
+      // Draw label on slice
+      const labelAngle = currentAngle + sliceAngle / 2;
+      const labelX = centerX + Math.cos(labelAngle) * (radius * 0.7);
+      const labelY = centerY + Math.sin(labelAngle) * (radius * 0.7);
+      
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 14px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText(asset.count, labelX, labelY);
+      
+      currentAngle += sliceAngle;
+    }
+  });
+  
+  // Draw legend below pie chart
+  const legendY = centerY + radius + 40;
+  const legendSpacing = canvas.width / assetTypes.length;
+  
+  assetTypes.forEach((asset, index) => {
+    const legendX = (index + 0.5) * legendSpacing;
+    
+    // Color box
+    ctx.fillStyle = asset.color;
+    ctx.fillRect(legendX - 40, legendY, 20, 15);
+    
+    // Text
+    ctx.fillStyle = '#1a202c';
+    ctx.font = '12px Inter';
+    ctx.textAlign = 'left';
+    ctx.fillText(`${asset.name}: ${asset.count}`, legendX - 15, legendY + 12);
+  });
+}
+
+function createValueChart(data) {
+  const canvas = document.getElementById('valueChart');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  
+  // Calculate values by asset type
+  const valueData = [
+    { name: 'Systems', value: 0, color: '#3182ce' },
+    { name: 'Printers', value: 0, color: '#48bb78' },
+    { name: 'Switches', value: 0, color: '#ed8936' },
+    { name: 'Racks', value: 0, color: '#9f7aea' },
+    { name: 'Cameras', value: 0, color: '#4299e1' }
+  ];
+  
+  // Sum values by department for each asset type
+  data.by_department.systems?.forEach(item => valueData[0].value += parseFloat(item.system_value || 0));
+  data.by_department.printers?.forEach(item => valueData[1].value += parseFloat(item.printer_value || 0));
+  data.by_department.switches?.forEach(item => valueData[2].value += parseFloat(item.switch_value || 0));
+  data.by_department.racks?.forEach(item => valueData[3].value += parseFloat(item.rack_value || 0));
+  data.by_department.cameras?.forEach(item => valueData[4].value += parseFloat(item.camera_value || 0));
+  
+  const maxValue = Math.max(...valueData.map(item => item.value), 1);
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  const barHeight = 40;
+  const spacing = 60;
+  const startY = 60;
+  const chartWidth = canvas.width - 200;
+  
+  valueData.forEach((item, index) => {
+    const barWidth = (item.value / maxValue) * chartWidth;
+    const y = startY + index * spacing;
+    
+    // Draw bar
+    ctx.fillStyle = item.color;
+    ctx.fillRect(120, y, barWidth, barHeight);
+    
+    // Draw label
+    ctx.fillStyle = '#1a202c';
+    ctx.font = '14px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(item.name, 110, y + barHeight / 2 + 5);
+    
+    // Draw value
+    ctx.fillStyle = '#4a5568';
+    ctx.font = '12px Inter';
+    ctx.textAlign = 'left';
+    ctx.fillText(`₹${item.value.toLocaleString()}`, 130 + barWidth, y + barHeight / 2 + 5);
+  });
+}
+
+function updateRecentActivity(activities) {
+  const activityContainer = document.getElementById('recentActivity');
+  if (!activityContainer || !activities) return;
+  
+  if (activities.length === 0) {
+    activityContainer.innerHTML = '<p class="text-center text-gray-500">No recent activity</p>';
+    return;
+  }
+  
+  activityContainer.innerHTML = activities.map(activity => `
     <div class="activity-item">
-      <div class="activity-icon">
-        <i class="fas fa-plus"></i>
+      <div class="activity-icon added">
+        <i class="fas fa-${getActivityIcon(activity.type)}"></i>
       </div>
-      <div class="activity-content">
-        <p><strong>${item.make_name} ${item.model_name}</strong> added to ${item.dept}</p>
-        <small>${item.dop}</small>
+      <div class="activity-details">
+        <h4>${activity.type} Added: ${activity.name}</h4>
+        <p>${activity.dept} • ${formatDate(activity.date)}</p>
       </div>
     </div>
   `).join('');
+}
+
+function updateDepartmentSummary(data) {
+  const tbody = document.querySelector('#departmentSummaryTable tbody');
+  if (!tbody) return;
+  
+  // Aggregate data by department
+  const deptSummary = {};
+  
+  // Process each category
+  ['systems', 'printers', 'switches', 'racks', 'cameras'].forEach(category => {
+    const categoryData = data.by_department[category] || [];
+    categoryData.forEach(item => {
+      const dept = item.dept || item.building_block;
+      if (!deptSummary[dept]) {
+        deptSummary[dept] = { 
+          systems: 0, printers: 0, switches: 0, racks: 0, cameras: 0, 
+          systemValue: 0, printerValue: 0, switchValue: 0, rackValue: 0, cameraValue: 0 
+        };
+      }
+      
+      deptSummary[dept][category] = (deptSummary[dept][category] || 0) + parseInt(item[category] || 0);
+      deptSummary[dept][category + 'Value'] = (deptSummary[dept][category + 'Value'] || 0) + parseFloat(item[category + '_value'] || 0);
+    });
+  });
+  
+  tbody.innerHTML = Object.entries(deptSummary).map(([dept, summary]) => {
+    const totalAssets = summary.systems + summary.printers + summary.switches + summary.racks + summary.cameras;
+    const totalValue = summary.systemValue + summary.printerValue + summary.switchValue + summary.rackValue + summary.cameraValue;
+    
+    return `
+      <tr>
+        <td><strong>${dept}</strong></td>
+        <td>${summary.systems}</td>
+        <td>${summary.printers}</td>
+        <td>${summary.switches}</td>
+        <td>${summary.racks}</td>
+        <td>${summary.cameras}</td>
+        <td><strong>${totalAssets}</strong></td>
+        <td><strong>₹${totalValue.toLocaleString()}</strong></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function getActivityIcon(type) {
+  const icons = {
+    'System': 'desktop',
+    'Printer': 'print',
+    'Switch': 'network-wired',
+    'Rack': 'server',
+    'Camera': 'video'
+  };
+  return icons[type] || 'plus';
+}
+
+function formatDate(dateString) {
+  if (!dateString || dateString === 'N/A') return 'N/A';
+  return new Date(dateString).toLocaleDateString();
 }
 
 // Reports functionality
@@ -1643,6 +2022,283 @@ function searchRackTable(){ const term=document.getElementById('rackSearchBox').
 
 function downloadRackExcel(){ const btn=document.getElementById('downloadRackExcelBtn'); const original=btn.textContent; btn.textContent='⏳ Generating...'; btn.disabled=true; fetch('api/racks/fetch_racks.php').then(r=>r.json()).then(data=>{ if(!data || !data.length){ alert('No rack data to export'); return; } const excelData=data.map((row,i)=>({'S No.':i+1,'Department':row.dept,'Laboratory/Location':row.lab_name,'Make':row.make,'Size':row.rack_size,'Power Distribution Unit':row.pdu,'Register Number':row.reg_no,'Page Number':row.page_no,'Price in Rs.':row.price,'Date of Purchase':row.dop,'Supplier Name':row.supplier_name,'Remarks':row.remarks})); const wb=XLSX.utils.book_new(); const ws=XLSX.utils.json_to_sheet(excelData); XLSX.utils.book_append_sheet(wb, ws, 'Rack Inventory'); const dateStr=new Date().toISOString().split('T')[0]; XLSX.writeFile(wb, `Rack_Inventory_${dateStr}.xlsx`); showNotification('Rack Excel file downloaded successfully!','success'); }).catch(err=>{ console.error(err); alert('Error downloading rack Excel'); }).finally(()=>{ btn.textContent=original; btn.disabled=false; }); }
 
+// Camera Management Functions
+const CAMERA_FIELDS = ["building_block","location","make","model","type","pixel","qty","cost","reg_no","p_no","dop","remarks"];
+const CAMERA_TYPES = ["IP", "HD", "Analog"];
+const CAMERA_PIXELS = ["1.3Mp", "2.0Mp", "3.2Mp", "4.0Mp", "5.0Mp", "6.0Mp", "8.0Mp"];
+
+function loadCameras(){
+  fetch('api/cameras/fetch_cameras.php')
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.querySelector('#camerasTable tbody');
+      tbody.innerHTML = '';
+      if(data && data.length > 0) {
+        data.forEach((camera, index) => {
+          addCameraRow(camera, index + 1);
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error loading cameras:', error);
+      showNotification('Error loading camera data', 'error');
+    });
+}
+
+function addCameraRow(camera, sn){
+  const tbody = document.querySelector('#camerasTable tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${sn}</td>
+    <td>${camera.building_block || ''}</td>
+    <td>${camera.location || ''}</td>
+    <td>${camera.make || ''}</td>
+    <td>${camera.model || ''}</td>
+    <td>${camera.type || ''}</td>
+    <td>${camera.pixel || ''}</td>
+    <td>${camera.qty || 0}</td>
+    <td>₹${camera.cost ? parseFloat(camera.cost).toLocaleString() : '0'}</td>
+    <td>${camera.reg_no || ''}</td>
+    <td>${camera.p_no || ''}</td>
+    <td>${camera.dop || ''}</td>
+    <td>${camera.remarks || ''}</td>
+    <td class="actions">
+      <button onclick="enableCameraEdit(this.parentElement.parentElement, ${camera.id})" title="Edit">Edit</button>
+      <button onclick="deleteCamera(${camera.id})" title="Delete">Delete</button>
+    </td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function addNewCamera(){
+  const tbody = document.querySelector('#camerasTable tbody');
+  const tr = document.createElement('tr');
+  tr.classList.add('editing', 'new-row');
+  tr.innerHTML = `
+    <td>New</td>
+    <td><input type="text" placeholder="Building/Block" data-field="building_block"></td>
+    <td><input type="text" placeholder="Location" data-field="location"></td>
+    <td><input type="text" placeholder="Make" data-field="make"></td>
+    <td><input type="text" placeholder="Model" data-field="model"></td>
+    <td><select data-field="type">${CAMERA_TYPES.map(t => `<option value="${t}">${t}</option>`).join('')}</select></td>
+    <td><select data-field="pixel">${CAMERA_PIXELS.map(p => `<option value="${p}">${p}</option>`).join('')}</select></td>
+    <td><input type="number" placeholder="Quantity" data-field="qty" min="1" value="1"></td>
+    <td><input type="number" placeholder="Cost" data-field="cost" step="0.01"></td>
+    <td><input type="text" placeholder="Register No" data-field="reg_no"></td>
+    <td><input type="text" placeholder="P. No" data-field="p_no"></td>
+    <td><input type="date" data-field="dop"></td>
+    <td><input type="text" placeholder="Remarks" data-field="remarks"></td>
+    <td class="actions">
+      <button onclick="saveNewCamera(this.parentElement.parentElement)" title="Save">Save</button>
+      <button onclick="this.parentElement.parentElement.remove()" title="Cancel">Cancel</button>
+    </td>
+  `;
+  tbody.insertBefore(tr, tbody.firstChild);
+}
+
+function saveNewCamera(tr){
+  const data = {};
+  tr.querySelectorAll('[data-field]').forEach(input => {
+    data[input.dataset.field] = input.value;
+  });
+  
+  if(!data.building_block || !data.location || !data.make || !data.type || !data.pixel) {
+    alert('Please fill in all required fields (Building/Block, Location, Make, Type, Pixel)');
+    return;
+  }
+  
+  fetch('api/cameras/insert_camera.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if(result.success) {
+      showNotification('Camera added successfully!', 'success');
+      loadCameras();
+    } else {
+      showNotification('Error adding camera: ' + (result.error || 'Unknown error'), 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error adding camera', 'error');
+  });
+}
+
+function enableCameraEdit(tr, id){
+  if(tr.classList.contains('editing')) return;
+  
+  const cells = tr.querySelectorAll('td');
+  const originalData = {};
+  
+  // Building/Block
+  originalData.building_block = cells[1].textContent;
+  cells[1].innerHTML = `<input type="text" value="${originalData.building_block}" data-field="building_block">`;
+  
+  // Location
+  originalData.location = cells[2].textContent;
+  cells[2].innerHTML = `<input type="text" value="${originalData.location}" data-field="location">`;
+  
+  // Make
+  originalData.make = cells[3].textContent;
+  cells[3].innerHTML = `<input type="text" value="${originalData.make}" data-field="make">`;
+  
+  // Model
+  originalData.model = cells[4].textContent;
+  cells[4].innerHTML = `<input type="text" value="${originalData.model}" data-field="model">`;
+  
+  // Type
+  originalData.type = cells[5].textContent;
+  cells[5].innerHTML = `<select data-field="type">${CAMERA_TYPES.map(t => `<option value="${t}" ${t === originalData.type ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
+  
+  // Pixel
+  originalData.pixel = cells[6].textContent;
+  cells[6].innerHTML = `<select data-field="pixel">${CAMERA_PIXELS.map(p => `<option value="${p}" ${p === originalData.pixel ? 'selected' : ''}>${p}</option>`).join('')}</select>`;
+  
+  // Quantity
+  originalData.qty = cells[7].textContent;
+  cells[7].innerHTML = `<input type="number" value="${originalData.qty}" data-field="qty" min="1">`;
+  
+  // Cost
+  originalData.cost = cells[8].textContent.replace('₹', '').replace(/,/g, '');
+  cells[8].innerHTML = `<input type="number" value="${originalData.cost}" data-field="cost" step="0.01">`;
+  
+  // Register No
+  originalData.reg_no = cells[9].textContent;
+  cells[9].innerHTML = `<input type="text" value="${originalData.reg_no}" data-field="reg_no">`;
+  
+  // P. No
+  originalData.p_no = cells[10].textContent;
+  cells[10].innerHTML = `<input type="text" value="${originalData.p_no}" data-field="p_no">`;
+  
+  // Date of Purchase
+  originalData.dop = cells[11].textContent;
+  cells[11].innerHTML = `<input type="date" value="${originalData.dop}" data-field="dop">`;
+  
+  // Remarks
+  originalData.remarks = cells[12].textContent;
+  cells[12].innerHTML = `<input type="text" value="${originalData.remarks}" data-field="remarks">`;
+  
+  // Actions
+  cells[13].innerHTML = `
+    <button onclick="saveCameraEdit(this.parentElement.parentElement, ${id})" title="Save">Save</button>
+    <button onclick="loadCameras()" title="Cancel">Cancel</button>
+  `;
+  
+  tr.classList.add('editing');
+}
+
+function saveCameraEdit(tr, id){
+  const data = {id: id};
+  tr.querySelectorAll('[data-field]').forEach(input => {
+    data[input.dataset.field] = input.value;
+  });
+  
+  fetch('api/cameras/update_camera.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if(result.success) {
+      showNotification('Camera updated successfully!', 'success');
+      loadCameras();
+    } else {
+      showNotification('Error updating camera: ' + (result.error || 'Unknown error'), 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error updating camera', 'error');
+  });
+}
+
+function deleteCamera(id){
+  if(!confirm('Delete this camera?')) return;
+  
+  fetch('api/cameras/delete_camera.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({id})
+  })
+  .then(response => response.json())
+  .then(result => {
+    if(result.success) {
+      showNotification('Camera deleted successfully!', 'success');
+      loadCameras();
+    } else {
+      showNotification('Error deleting camera: ' + (result.error || 'Unknown error'), 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error deleting camera', 'error');
+  });
+}
+
+function searchCameraTable(){
+  const term = document.getElementById('cameraSearchBox').value.toLowerCase();
+  document.querySelectorAll('#camerasTable tbody tr').forEach(row => {
+    let found = false;
+    row.querySelectorAll('td').forEach(td => {
+      if(td.textContent.toLowerCase().includes(term)) found = true;
+    });
+    row.style.display = found ? '' : 'none';
+  });
+}
+
+function downloadCameraExcel(){
+  const btn = document.getElementById('downloadCameraExcelBtn');
+  const original = btn.textContent;
+  btn.textContent = '⏳ Generating...';
+  btn.disabled = true;
+  
+  fetch('api/cameras/fetch_cameras.php')
+    .then(response => response.json())
+    .then(data => {
+      if(!data || !data.length) {
+        alert('No camera data to export');
+        return;
+      }
+      
+      const excelData = data.map((row, i) => ({
+        'S No.': i + 1,
+        'Building / Block': row.building_block,
+        'Location': row.location,
+        'Make': row.make,
+        'Model': row.model,
+        'Type': row.type,
+        'Pixel': row.pixel,
+        'QTY': row.qty,
+        'Cost': row.cost,
+        'Reg No': row.reg_no,
+        'P. No': row.p_no,
+        'D.O.P': row.dop,
+        'Remarks': row.remarks
+      }));
+      
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      XLSX.utils.book_append_sheet(wb, ws, 'Camera Inventory');
+      
+      const dateStr = new Date().toISOString().split('T')[0];
+      XLSX.writeFile(wb, `Camera_Inventory_${dateStr}.xlsx`);
+      
+      showNotification('Camera Excel file downloaded successfully!', 'success');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error downloading camera Excel');
+    })
+    .finally(() => {
+      btn.textContent = original;
+      btn.disabled = false;
+    });
+}
+
 
 function loadData() {
   fetch('api/system/fetch.php')
@@ -1971,6 +2627,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize navigation
   initNavigation();
   
+  // Initialize dashboard
+  loadDashboardData();
+  
   // Initialize inventory functionality
   loadData();
   document.getElementById('addNewBtn').addEventListener('click', addNew);
@@ -1995,6 +2654,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addRackBtn').addEventListener('click', addNewRack);
     document.getElementById('downloadRackExcelBtn').addEventListener('click', downloadRackExcel);
     document.getElementById('rackSearchBox').addEventListener('input', searchRackTable);
+  }
+
+  // Initialize camera functionality
+  if(document.getElementById('camerasTable')) {
+    loadCameras();
+    document.getElementById('addCameraBtn').addEventListener('click', addNewCamera);
+    document.getElementById('downloadCameraExcelBtn').addEventListener('click', downloadCameraExcel);
+    document.getElementById('cameraSearchBox').addEventListener('input', searchCameraTable);
   }
 });
 </script>

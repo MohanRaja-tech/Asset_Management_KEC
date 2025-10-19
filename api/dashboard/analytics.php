@@ -25,6 +25,9 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) as count, SUM(COALESCE(CAST(cost AS DECIMAL(10,2)), 0)) as value FROM cameras");
     $cameraTotals = $stmt->fetch();
     
+    $stmt = $pdo->query("SELECT COUNT(*) as count, SUM(COALESCE(CAST(cost AS DECIMAL(10,2)), 0)) as value FROM nvr");
+    $nvrTotals = $stmt->fetch();
+    
     // Get department summary for systems
     $stmt = $pdo->query("
         SELECT 
@@ -80,15 +83,28 @@ try {
     ");
     $camerasByDept = $stmt->fetchAll();
     
+    // Get department summary for NVR
+    $stmt = $pdo->query("
+        SELECT 
+            building_block as dept,
+            COUNT(*) as nvr,
+            SUM(COALESCE(CAST(cost AS DECIMAL(10,2)), 0)) as nvr_value
+        FROM nvr 
+        GROUP BY building_block
+    ");
+    $nvrByDept = $stmt->fetchAll();
+    
     // Get recent activity (last 10 additions/updates)
     $stmt = $pdo->query("
-        (SELECT 'System' as type, make_name as name, dept, created_at as date, 'added' as action FROM lab_inventory ORDER BY created_at DESC LIMIT 3)
+        (SELECT 'System' as type, make_name as name, dept, created_at as date, 'added' as action FROM lab_inventory ORDER BY created_at DESC LIMIT 2)
         UNION ALL
-        (SELECT 'Printer' as type, make as name, dept, created_at as date, 'added' as action FROM printers ORDER BY created_at DESC LIMIT 3)
+        (SELECT 'Printer' as type, make as name, dept, created_at as date, 'added' as action FROM printers ORDER BY created_at DESC LIMIT 2)
         UNION ALL
         (SELECT 'Switch' as type, make as name, dept, created_at as date, 'added' as action FROM switches ORDER BY created_at DESC LIMIT 2)
         UNION ALL
         (SELECT 'Camera' as type, make as name, building_block as dept, created_at as date, 'added' as action FROM cameras ORDER BY created_at DESC LIMIT 2)
+        UNION ALL
+        (SELECT 'NVR' as type, make as name, building_block as dept, created_at as date, 'added' as action FROM nvr ORDER BY created_at DESC LIMIT 2)
         ORDER BY date DESC LIMIT 10
     ");
     $recentActivity = $stmt->fetchAll();
@@ -101,18 +117,21 @@ try {
             'switches' => (int)($switchTotals['count'] ?? 0),
             'racks' => (int)($rackTotals['count'] ?? 0),
             'cameras' => (int)($cameraTotals['count'] ?? 0),
+            'nvr' => (int)($nvrTotals['count'] ?? 0),
             'total_value' => (float)($systemTotals['value'] ?? 0) + 
                            (float)($printerTotals['value'] ?? 0) + 
                            (float)($switchTotals['value'] ?? 0) + 
                            (float)($rackTotals['value'] ?? 0) + 
-                           (float)($cameraTotals['value'] ?? 0)
+                           (float)($cameraTotals['value'] ?? 0) + 
+                           (float)($nvrTotals['value'] ?? 0)
         ],
         'by_department' => [
             'systems' => $systemsByDept,
             'printers' => $printersByDept,
             'switches' => $switchesByDept,
             'racks' => $racksByDept,
-            'cameras' => $camerasByDept
+            'cameras' => $camerasByDept,
+            'nvr' => $nvrByDept
         ],
         'recent_activity' => $recentActivity
     ];

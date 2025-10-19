@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab Inventory Management System</title>
+<title>KEC Asset Management</title>
+<link rel="icon" type="image/png" href="images.png">
 <link rel="stylesheet" href="css/style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -14,8 +15,11 @@
 <nav class="navbar">
   <div class="nav-container">
     <div class="nav-brand">
-      <i class="fas fa-laptop-code"></i>
-      <span>Inventory</span>
+      <img src="Namma Kongu.jpeg" alt="Namma Kongu" class="brand-logo">
+      <div class="brand-text">
+        <span class="brand-title">Kongu Engineering College</span>
+        <span class="brand-subtitle">Asset Management System</span>
+      </div>
     </div>
     <div class="nav-menu" id="navMenu">
       <a href="#dashboard" class="nav-link active" data-page="dashboard">
@@ -42,6 +46,10 @@
         <i class="fas fa-video"></i>
         <span>Cameras</span>
       </a>
+      <a href="#nvr" class="nav-link" data-page="nvr">
+        <i class="fas fa-hdd"></i>
+        <span>NVR</span>
+      </a>
       <!-- <a href="#reports" class="nav-link" data-page="reports">
         <i class="fas fa-chart-bar"></i>
         <span>Reports</span>
@@ -64,11 +72,6 @@
   <!-- Dashboard Page -->
   <div id="dashboard" class="page active">
     <div class="container">
-      <div class="page-header">
-        <h1><i class="fas fa-tachometer-alt"></i> Lab Inventory Dashboard</h1>
-        <p class="subtitle">Comprehensive overview of all lab assets and analytics</p>
-      </div>
-      
       <!-- Overview Stats Grid -->
       <div class="dashboard-stats-grid">
         <div class="stat-card primary">
@@ -123,6 +126,17 @@
             <h3 id="totalCameras">0</h3>
             <p>CCTV Cameras</p>
             <span class="stat-trend" id="camerasTrend">Security systems</span>
+          </div>
+        </div>
+
+        <div class="stat-card teal">
+          <div class="stat-icon">
+            <i class="fas fa-hdd"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="totalNvr">0</h3>
+            <p>NVR Devices</p>
+            <span class="stat-trend" id="nvrTrend">Recording systems</span>
           </div>
         </div>
         
@@ -209,6 +223,7 @@
                     <th>Switches</th>
                     <th>Racks</th>
                     <th>Cameras</th>
+                    <th>NVR</th>
                     <th>Total Assets</th>
                     <th>Total Value</th>
                   </tr>
@@ -504,6 +519,50 @@
     </div>
   </div>
 
+  <!-- NVR Page -->
+  <div id="nvr" class="page">
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-hdd"></i> NVR Management</h1>
+        <p class="subtitle">Manage Network Video Recorder inventory and details</p>
+      </div>
+      <div class="controls">
+        <button id="addNvrBtn">+ Add New NVR</button>
+        <button id="downloadNvrExcelBtn">📊 Download Excel</button>
+        <div class="search-container">
+          <input type="text" id="nvrSearchBox" placeholder="Search NVR...">
+        </div>
+      </div>
+      <div class="table-container">
+        <table id="nvrTable">
+          <thead>
+            <tr>
+              <th>S.No</th>
+              <th>Building / Block</th>
+              <th>Location</th>
+              <th>Make</th>
+              <th>Model</th>
+              <th>Serial No</th>
+              <th>HDD 2TB QTY</th>
+              <th>HDD 4TB QTY</th>
+              <th>HDD 6TB QTY</th>
+              <th>HDD 8TB QTY</th>
+              <th>Type</th>
+              <th>QTY</th>
+              <th>Cost</th>
+              <th>Reg No</th>
+              <th>P. No</th>
+              <th>D.O.P</th>
+              <th>Remarks</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <!-- Settings Page -->
   <div id="settings" class="page">
     <div class="container">
@@ -546,26 +605,6 @@
           <div class="department-list" id="departmentList">
             <!-- Departments will be populated here -->
           </div>
-        </div>
-        
-        <div class="settings-section">
-          <h3><i class="fas fa-palette"></i> Appearance</h3>
-          <div class="form-group">
-            <label for="themeSelect">Theme</label>
-            <select id="themeSelect" title="Select application theme">
-              <option value="light">Light Theme</option>
-              <option value="dark">Dark Theme</option>
-              <option value="auto">Auto (System)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="languageSelect">Language</label>
-            <select id="languageSelect" title="Select application language">
-              <option value="en">English</option>
-              <option value="hi">Hindi</option>
-            </select>
-          </div>
-          <button class="btn-primary" onclick="saveAppearanceSettings()">Save Appearance</button>
         </div>
         
         <!-- <div class="settings-section">
@@ -683,6 +722,25 @@ function showPage(pageId) {
       loadReportsData();
     } else if (pageId === 'settings') {
       loadSettingsData();
+    } else if (pageId === 'nvr') {
+      loadNvr();
+      // Re-initialize NVR button event listeners
+      const addNvrBtn = document.getElementById('addNvrBtn');
+      const downloadNvrExcelBtn = document.getElementById('downloadNvrExcelBtn');
+      const nvrSearchBox = document.getElementById('nvrSearchBox');
+      
+      if (addNvrBtn && !addNvrBtn.hasAttribute('data-listener-attached')) {
+        addNvrBtn.addEventListener('click', addNewNvr);
+        addNvrBtn.setAttribute('data-listener-attached', 'true');
+      }
+      if (downloadNvrExcelBtn && !downloadNvrExcelBtn.hasAttribute('data-listener-attached')) {
+        downloadNvrExcelBtn.addEventListener('click', downloadNvrExcel);
+        downloadNvrExcelBtn.setAttribute('data-listener-attached', 'true');
+      }
+      if (nvrSearchBox && !nvrSearchBox.hasAttribute('data-listener-attached')) {
+        nvrSearchBox.addEventListener('input', searchNvrTable);
+        nvrSearchBox.setAttribute('data-listener-attached', 'true');
+      }
     }
   }
 }
@@ -722,6 +780,7 @@ function updateDashboardStats(data) {
   document.getElementById('totalSwitches').textContent = totals.switches || 0;
   document.getElementById('totalRacks').textContent = totals.racks || 0;
   document.getElementById('totalCameras').textContent = totals.cameras || 0;
+  document.getElementById('totalNvr').textContent = totals.nvr || 0;
   document.getElementById('totalValue').textContent = `₹${(totals.total_value || 0).toLocaleString()}`;
   
   // Update trends
@@ -730,6 +789,7 @@ function updateDashboardStats(data) {
   document.getElementById('switchesTrend').textContent = `${totals.switches} network devices`;
   document.getElementById('racksTrend').textContent = `${totals.racks} infrastructure units`;
   document.getElementById('camerasTrend').textContent = `${totals.cameras} security devices`;
+  document.getElementById('nvrTrend').textContent = `${totals.nvr} recording devices`;
   document.getElementById('valueTrend').textContent = `Total investment value`;
 }
 
@@ -752,10 +812,10 @@ function createDepartmentChart(data) {
   // Combine all department data
   [...(deptSystems.systems || []), ...(deptSystems.printers || []), 
    ...(deptSystems.switches || []), ...(deptSystems.racks || []),
-   ...(deptSystems.cameras || [])].forEach(item => {
+   ...(deptSystems.cameras || []), ...(deptSystems.nvr || [])].forEach(item => {
     const dept = item.dept || item.building_block;
     if (dept) {
-      deptData[dept] = (deptData[dept] || 0) + (parseInt(item.systems || item.printers || item.switches || item.racks || item.cameras || 0));
+      deptData[dept] = (deptData[dept] || 0) + (parseInt(item.systems || item.printers || item.switches || item.racks || item.cameras || item.nvr || 0));
     }
   });
   
@@ -816,7 +876,8 @@ function createAssetTypeChart(data) {
     { name: 'Printers', count: totals.printers, color: '#48bb78' },
     { name: 'Switches', count: totals.switches, color: '#ed8936' },
     { name: 'Racks', count: totals.racks, color: '#9f7aea' },
-    { name: 'Cameras', count: totals.cameras, color: '#4299e1' }
+    { name: 'Cameras', count: totals.cameras, color: '#4299e1' },
+    { name: 'NVR', count: totals.nvr, color: '#38b2ac' }
   ];
   
   const total = assetTypes.reduce((sum, asset) => sum + asset.count, 0);
@@ -832,8 +893,8 @@ function createAssetTypeChart(data) {
   }
   
   const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2 - 20;
-  const radius = Math.min(centerX, centerY) - 40;
+  const centerY = canvas.height / 2 - 35;
+  const radius = Math.min(centerX, centerY) - 45;
   
   let currentAngle = -Math.PI / 2;
   
@@ -863,22 +924,27 @@ function createAssetTypeChart(data) {
     }
   });
   
-  // Draw legend below pie chart
-  const legendY = centerY + radius + 40;
-  const legendSpacing = canvas.width / assetTypes.length;
+  // Draw legend below pie chart with more spacing
+  const legendStartY = centerY + radius + 60;
+  const legendItemsPerRow = 3;
+  const legendRowSpacing = 25;
+  const legendColSpacing = canvas.width / legendItemsPerRow;
   
   assetTypes.forEach((asset, index) => {
-    const legendX = (index + 0.5) * legendSpacing;
+    const row = Math.floor(index / legendItemsPerRow);
+    const col = index % legendItemsPerRow;
+    const legendX = (col + 0.5) * legendColSpacing;
+    const legendY = legendStartY + (row * legendRowSpacing);
     
     // Color box
     ctx.fillStyle = asset.color;
-    ctx.fillRect(legendX - 40, legendY, 20, 15);
+    ctx.fillRect(legendX - 50, legendY, 20, 15);
     
     // Text
     ctx.fillStyle = '#1a202c';
     ctx.font = '12px Inter';
     ctx.textAlign = 'left';
-    ctx.fillText(`${asset.name}: ${asset.count}`, legendX - 15, legendY + 12);
+    ctx.fillText(`${asset.name}: ${asset.count}`, legendX - 25, legendY + 12);
   });
 }
 
@@ -894,7 +960,8 @@ function createValueChart(data) {
     { name: 'Printers', value: 0, color: '#48bb78' },
     { name: 'Switches', value: 0, color: '#ed8936' },
     { name: 'Racks', value: 0, color: '#9f7aea' },
-    { name: 'Cameras', value: 0, color: '#4299e1' }
+    { name: 'Cameras', value: 0, color: '#4299e1' },
+    { name: 'NVR', value: 0, color: '#38b2ac' }
   ];
   
   // Sum values by department for each asset type
@@ -903,6 +970,7 @@ function createValueChart(data) {
   data.by_department.switches?.forEach(item => valueData[2].value += parseFloat(item.switch_value || 0));
   data.by_department.racks?.forEach(item => valueData[3].value += parseFloat(item.rack_value || 0));
   data.by_department.cameras?.forEach(item => valueData[4].value += parseFloat(item.camera_value || 0));
+  data.by_department.nvr?.forEach(item => valueData[5].value += parseFloat(item.nvr_value || 0));
   
   const maxValue = Math.max(...valueData.map(item => item.value), 1);
   
@@ -965,14 +1033,14 @@ function updateDepartmentSummary(data) {
   const deptSummary = {};
   
   // Process each category
-  ['systems', 'printers', 'switches', 'racks', 'cameras'].forEach(category => {
+  ['systems', 'printers', 'switches', 'racks', 'cameras', 'nvr'].forEach(category => {
     const categoryData = data.by_department[category] || [];
     categoryData.forEach(item => {
       const dept = item.dept || item.building_block;
       if (!deptSummary[dept]) {
         deptSummary[dept] = { 
-          systems: 0, printers: 0, switches: 0, racks: 0, cameras: 0, 
-          systemValue: 0, printerValue: 0, switchValue: 0, rackValue: 0, cameraValue: 0 
+          systems: 0, printers: 0, switches: 0, racks: 0, cameras: 0, nvr: 0,
+          systemValue: 0, printerValue: 0, switchValue: 0, rackValue: 0, cameraValue: 0, nvrValue: 0
         };
       }
       
@@ -982,8 +1050,8 @@ function updateDepartmentSummary(data) {
   });
   
   tbody.innerHTML = Object.entries(deptSummary).map(([dept, summary]) => {
-    const totalAssets = summary.systems + summary.printers + summary.switches + summary.racks + summary.cameras;
-    const totalValue = summary.systemValue + summary.printerValue + summary.switchValue + summary.rackValue + summary.cameraValue;
+    const totalAssets = summary.systems + summary.printers + summary.switches + summary.racks + summary.cameras + summary.nvr;
+    const totalValue = summary.systemValue + summary.printerValue + summary.switchValue + summary.rackValue + summary.cameraValue + summary.nvrValue;
     
     return `
       <tr>
@@ -993,6 +1061,7 @@ function updateDepartmentSummary(data) {
         <td>${summary.switches}</td>
         <td>${summary.racks}</td>
         <td>${summary.cameras}</td>
+        <td>${summary.nvr}</td>
         <td><strong>${totalAssets}</strong></td>
         <td><strong>₹${totalValue.toLocaleString()}</strong></td>
       </tr>
@@ -1006,7 +1075,8 @@ function getActivityIcon(type) {
     'Printer': 'print',
     'Switch': 'network-wired',
     'Rack': 'server',
-    'Camera': 'video'
+    'Camera': 'video',
+    'NVR': 'hdd'
   };
   return icons[type] || 'plus';
 }
@@ -1140,7 +1210,6 @@ function createTimelineChart(canvas, data) {
 // Settings functionality
 function loadSettingsData() {
   loadDepartments();
-  loadAppearanceSettings();
 }
 
 function loadDepartments() {
@@ -1153,14 +1222,6 @@ function loadDepartments() {
       <button class="btn-danger" onclick="removeDepartment('${dept}')">Remove</button>
     </div>
   `).join('');
-}
-
-function loadAppearanceSettings() {
-  const theme = localStorage.getItem('theme') || 'light';
-  const language = localStorage.getItem('language') || 'en';
-  
-  document.getElementById('themeSelect').value = theme;
-  document.getElementById('languageSelect').value = language;
 }
 
 // Report generation functions
@@ -1223,29 +1284,6 @@ function removeDepartment(dept) {
       showNotification(`Department "${dept}" removed!`, 'success');
     }
   }
-}
-
-function saveAppearanceSettings() {
-  const theme = document.getElementById('themeSelect').value;
-  const language = document.getElementById('languageSelect').value;
-  
-  localStorage.setItem('theme', theme);
-  localStorage.setItem('language', language);
-  
-  // Apply theme
-  document.body.className = theme === 'dark' ? 'dark-theme' : '';
-  
-  showNotification('Appearance settings saved!', 'success');
-}
-
-function saveSecuritySettings() {
-  const timeout = document.getElementById('sessionTimeout').value;
-  const enable2FA = document.getElementById('enable2FA').checked;
-  
-  localStorage.setItem('sessionTimeout', timeout);
-  localStorage.setItem('enable2FA', enable2FA);
-  
-  showNotification('Security settings saved!', 'success');
 }
 
 // Printer Management Functions
@@ -2299,6 +2337,307 @@ function downloadCameraExcel(){
     });
 }
 
+// NVR Management Functions
+const NVR_FIELDS = ["building_block","location","make","model","serial_no","hdd_2tb_qty","hdd_4tb_qty","hdd_6tb_qty","hdd_8tb_qty","type","qty","cost","reg_no","page_no","dop","remarks"];
+const NVR_TYPES = ["8 Channel", "16 Channel", "32 Channel", "64 Channel", "8 Channel PoE", "16 Channel PoE", "32 Channel PoE"];
+
+function loadNvr(){
+  fetch('api/nvr/fetch_nvr.php')
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.querySelector('#nvrTable tbody');
+      tbody.innerHTML = '';
+      if(data && data.length > 0) {
+        data.forEach((nvr, index) => {
+          addNvrRow(nvr, index + 1);
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Error loading NVR:', error);
+      showNotification('Error loading NVR data', 'error');
+    });
+}
+
+function addNvrRow(nvr, sn){
+  const tbody = document.querySelector('#nvrTable tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${sn}</td>
+    <td>${nvr.building_block || ''}</td>
+    <td>${nvr.location || ''}</td>
+    <td>${nvr.make || ''}</td>
+    <td>${nvr.model || ''}</td>
+    <td>${nvr.serial_no || ''}</td>
+    <td>${nvr.hdd_2tb_qty || 0}</td>
+    <td>${nvr.hdd_4tb_qty || 0}</td>
+    <td>${nvr.hdd_6tb_qty || 0}</td>
+    <td>${nvr.hdd_8tb_qty || 0}</td>
+    <td>${nvr.type || ''}</td>
+    <td>${nvr.qty || 0}</td>
+    <td>₹${nvr.cost ? parseFloat(nvr.cost).toLocaleString() : '0'}</td>
+    <td>${nvr.reg_no || ''}</td>
+    <td>${nvr.page_no || ''}</td>
+    <td>${nvr.dop || ''}</td>
+    <td>${nvr.remarks || ''}</td>
+    <td class="actions">
+      <button onclick="enableNvrEdit(this.parentElement.parentElement, ${nvr.id})" title="Edit">Edit</button>
+      <button onclick="deleteNvr(${nvr.id})" title="Delete">Delete</button>
+    </td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function addNewNvr(){
+  const tbody = document.querySelector('#nvrTable tbody');
+  const tr = document.createElement('tr');
+  tr.classList.add('editing', 'new-row');
+  tr.innerHTML = `
+    <td>New</td>
+    <td><input type="text" placeholder="Building/Block" data-field="building_block"></td>
+    <td><input type="text" placeholder="Location" data-field="location"></td>
+    <td><input type="text" placeholder="Make" data-field="make"></td>
+    <td><input type="text" placeholder="Model" data-field="model"></td>
+    <td><input type="text" placeholder="Serial No" data-field="serial_no"></td>
+    <td><input type="number" placeholder="2TB" data-field="hdd_2tb_qty" min="0" value="0"></td>
+    <td><input type="number" placeholder="4TB" data-field="hdd_4tb_qty" min="0" value="0"></td>
+    <td><input type="number" placeholder="6TB" data-field="hdd_6tb_qty" min="0" value="0"></td>
+    <td><input type="number" placeholder="8TB" data-field="hdd_8tb_qty" min="0" value="0"></td>
+    <td><select data-field="type">${NVR_TYPES.map(t => `<option value="${t}">${t}</option>`).join('')}</select></td>
+    <td><input type="number" placeholder="Quantity" data-field="qty" min="1" value="1"></td>
+    <td><input type="number" placeholder="Cost" data-field="cost" step="0.01"></td>
+    <td><input type="text" placeholder="Register No" data-field="reg_no"></td>
+    <td><input type="text" placeholder="Page No" data-field="page_no"></td>
+    <td><input type="date" data-field="dop"></td>
+    <td><input type="text" placeholder="Remarks" data-field="remarks"></td>
+    <td class="actions">
+      <button onclick="saveNewNvr(this.parentElement.parentElement)" title="Save">Save</button>
+      <button onclick="this.parentElement.parentElement.remove()" title="Cancel">Cancel</button>
+    </td>
+  `;
+  tbody.insertBefore(tr, tbody.firstChild);
+}
+
+function saveNewNvr(tr){
+  const data = {};
+  tr.querySelectorAll('[data-field]').forEach(input => {
+    data[input.dataset.field] = input.value;
+  });
+  
+  if(!data.building_block || !data.location || !data.make || !data.type) {
+    alert('Please fill in all required fields (Building/Block, Location, Make, Type)');
+    return;
+  }
+  
+  fetch('api/nvr/insert_nvr.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if(result.success) {
+      showNotification('NVR added successfully!', 'success');
+      loadNvr();
+    } else {
+      showNotification('Error adding NVR: ' + (result.error || 'Unknown error'), 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error adding NVR', 'error');
+  });
+}
+
+function enableNvrEdit(tr, id){
+  if(tr.classList.contains('editing')) return;
+  
+  const cells = tr.querySelectorAll('td');
+  const originalData = {};
+  
+  // Building/Block
+  originalData.building_block = cells[1].textContent;
+  cells[1].innerHTML = `<input type="text" value="${originalData.building_block}" data-field="building_block">`;
+  
+  // Location
+  originalData.location = cells[2].textContent;
+  cells[2].innerHTML = `<input type="text" value="${originalData.location}" data-field="location">`;
+  
+  // Make
+  originalData.make = cells[3].textContent;
+  cells[3].innerHTML = `<input type="text" value="${originalData.make}" data-field="make">`;
+  
+  // Model
+  originalData.model = cells[4].textContent;
+  cells[4].innerHTML = `<input type="text" value="${originalData.model}" data-field="model">`;
+  
+  // Serial No
+  originalData.serial_no = cells[5].textContent;
+  cells[5].innerHTML = `<input type="text" value="${originalData.serial_no}" data-field="serial_no">`;
+  
+  // HDD quantities
+  originalData.hdd_2tb_qty = cells[6].textContent;
+  cells[6].innerHTML = `<input type="number" value="${originalData.hdd_2tb_qty}" data-field="hdd_2tb_qty" min="0">`;
+  
+  originalData.hdd_4tb_qty = cells[7].textContent;
+  cells[7].innerHTML = `<input type="number" value="${originalData.hdd_4tb_qty}" data-field="hdd_4tb_qty" min="0">`;
+  
+  originalData.hdd_6tb_qty = cells[8].textContent;
+  cells[8].innerHTML = `<input type="number" value="${originalData.hdd_6tb_qty}" data-field="hdd_6tb_qty" min="0">`;
+  
+  originalData.hdd_8tb_qty = cells[9].textContent;
+  cells[9].innerHTML = `<input type="number" value="${originalData.hdd_8tb_qty}" data-field="hdd_8tb_qty" min="0">`;
+  
+  // Type
+  originalData.type = cells[10].textContent;
+  cells[10].innerHTML = `<select data-field="type">${NVR_TYPES.map(t => `<option value="${t}" ${t === originalData.type ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
+  
+  // Quantity
+  originalData.qty = cells[11].textContent;
+  cells[11].innerHTML = `<input type="number" value="${originalData.qty}" data-field="qty" min="1">`;
+  
+  // Cost
+  originalData.cost = cells[12].textContent.replace('₹', '').replace(/,/g, '');
+  cells[12].innerHTML = `<input type="number" value="${originalData.cost}" data-field="cost" step="0.01">`;
+  
+  // Register No
+  originalData.reg_no = cells[13].textContent;
+  cells[13].innerHTML = `<input type="text" value="${originalData.reg_no}" data-field="reg_no">`;
+  
+  // Page No
+  originalData.page_no = cells[14].textContent;
+  cells[14].innerHTML = `<input type="text" value="${originalData.page_no}" data-field="page_no">`;
+  
+  // Date of Purchase
+  originalData.dop = cells[15].textContent;
+  cells[15].innerHTML = `<input type="date" value="${originalData.dop}" data-field="dop">`;
+  
+  // Remarks
+  originalData.remarks = cells[16].textContent;
+  cells[16].innerHTML = `<input type="text" value="${originalData.remarks}" data-field="remarks">`;
+  
+  // Actions
+  cells[17].innerHTML = `
+    <button onclick="saveNvrEdit(this.parentElement.parentElement, ${id})" title="Save">Save</button>
+    <button onclick="loadNvr()" title="Cancel">Cancel</button>
+  `;
+  
+  tr.classList.add('editing');
+}
+
+function saveNvrEdit(tr, id){
+  const data = {id: id};
+  tr.querySelectorAll('[data-field]').forEach(input => {
+    data[input.dataset.field] = input.value;
+  });
+  
+  fetch('api/nvr/update_nvr.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    if(result.success) {
+      showNotification('NVR updated successfully!', 'success');
+      loadNvr();
+    } else {
+      showNotification('Error updating NVR: ' + (result.error || 'Unknown error'), 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error updating NVR', 'error');
+  });
+}
+
+function deleteNvr(id){
+  if(!confirm('Delete this NVR?')) return;
+  
+  fetch('api/nvr/delete_nvr.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({id})
+  })
+  .then(response => response.json())
+  .then(result => {
+    if(result.success) {
+      showNotification('NVR deleted successfully!', 'success');
+      loadNvr();
+    } else {
+      showNotification('Error deleting NVR: ' + (result.error || 'Unknown error'), 'error');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    showNotification('Error deleting NVR', 'error');
+  });
+}
+
+function searchNvrTable(){
+  const term = document.getElementById('nvrSearchBox').value.toLowerCase();
+  document.querySelectorAll('#nvrTable tbody tr').forEach(row => {
+    let found = false;
+    row.querySelectorAll('td').forEach(td => {
+      if(td.textContent.toLowerCase().includes(term)) found = true;
+    });
+    row.style.display = found ? '' : 'none';
+  });
+}
+
+function downloadNvrExcel(){
+  const btn = document.getElementById('downloadNvrExcelBtn');
+  const original = btn.textContent;
+  btn.textContent = '⏳ Generating...';
+  btn.disabled = true;
+  
+  fetch('api/nvr/fetch_nvr.php')
+    .then(response => response.json())
+    .then(data => {
+      if(!data || !data.length) {
+        alert('No NVR data to export');
+        return;
+      }
+      
+      const excelData = data.map((row, i) => ({
+        'S No.': i + 1,
+        'Building / Block': row.building_block,
+        'Location': row.location,
+        'Make': row.make,
+        'Model': row.model,
+        'Serial No': row.serial_no,
+        'HDD 2TB QTY': row.hdd_2tb_qty,
+        'HDD 4TB QTY': row.hdd_4tb_qty,
+        'HDD 6TB QTY': row.hdd_6tb_qty,
+        'HDD 8TB QTY': row.hdd_8tb_qty,
+        'Type': row.type,
+        'QTY': row.qty,
+        'Cost': row.cost,
+        'Reg No': row.reg_no,
+        'P. No': row.page_no,
+        'D.O.P': row.dop,
+        'Remarks': row.remarks
+      }));
+      
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      XLSX.utils.book_append_sheet(wb, ws, 'NVR Inventory');
+      
+      const dateStr = new Date().toISOString().split('T')[0];
+      XLSX.writeFile(wb, `NVR_Inventory_${dateStr}.xlsx`);
+      
+      showNotification('NVR Excel file downloaded successfully!', 'success');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error downloading NVR Excel');
+    })
+    .finally(() => {
+      btn.textContent = original;
+      btn.disabled = false;
+    });
+}
+
 
 function loadData() {
   fetch('api/system/fetch.php')
@@ -2662,6 +3001,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addCameraBtn').addEventListener('click', addNewCamera);
     document.getElementById('downloadCameraExcelBtn').addEventListener('click', downloadCameraExcel);
     document.getElementById('cameraSearchBox').addEventListener('input', searchCameraTable);
+  }
+
+  // Initialize NVR functionality
+  if(document.getElementById('nvrTable')) {
+    loadNvr();
+    document.getElementById('addNvrBtn').addEventListener('click', addNewNvr);
+    document.getElementById('downloadNvrExcelBtn').addEventListener('click', downloadNvrExcel);
+    document.getElementById('nvrSearchBox').addEventListener('input', searchNvrTable);
   }
 });
 </script>
